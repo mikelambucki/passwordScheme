@@ -2,8 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Date;
+import java.sql.Timestamp;
 
 public class Scheme extends JFrame {
 
@@ -26,15 +33,23 @@ public class Scheme extends JFrame {
     private JButton enterEmailButton;
     private JButton doneEmailButton;
 
-    private String emailPassword;
-    private String bankPassword;
-    private String shopPassword;
+    private String emailPassword = "";
+    private String bankPassword = "";
+    private String shopPassword = "";
 
     private static String FINAL_EMAIL_PASSWORD;
     private static String FINAL_BANK_PASSWORD;
     private static String FINAL_SHOP_PASSWORD;
 
     private int attempts;
+
+    private boolean isEmail = false;
+    private boolean isBank = false;
+    private boolean isShop = false;
+
+    Random rand = new Random();
+    int num = rand.nextInt(100000);
+    private String user = "user" + Integer.toString(num);
 
     private static final String [] WORDS = {"tie", "nose", "my", "ever", "how", "plan",
             "in", "cage", "did", "bell", "each", "fort",
@@ -48,6 +63,15 @@ public class Scheme extends JFrame {
                                         "7", "8", "9", "0", ";", ":",
                                         "]", "[", "?", "=", "+", "_",
                                         "-", "~", "/", "{", "}", "*",};
+
+    private Date date = new Date();
+    private Timestamp ts = new Timestamp(date.getTime());
+
+    String directory = "C:\\Users\\micha\\Documents\\COMP3008\\PasswordScheme";
+    String fileName = "sample.txt";
+    String absolutePath = directory + File.separator + fileName;
+
+
 
     //open file to write to (append to save updates)
 
@@ -64,6 +88,52 @@ public class Scheme extends JFrame {
     */
 
 //    create random 3 word 1 symbol password form WORDS & NUMBER_AND_SYMBOLS array
+
+    private void fileWriter(String event){
+        String scheme = "";
+        String fileContent = "";
+        if(isEmail){
+            scheme+= "Email";
+        }
+        if(isBank){
+            scheme+= "Bank";
+        }
+        if(isShop){
+            scheme+= "Shop";
+        }
+
+        if(event == "practiceGood"){
+            fileContent = ts + " " + user + " " + scheme + " " + "practice good" + " ";
+        }
+        if(event == "practiceBad"){
+            fileContent = ts + " " + user + " " + scheme + " " + "practice bad" + " ";
+        }
+        if(event == "createStart"){
+            fileContent = ts + " " + user + " " + scheme + " " + "create start" + " ";
+        }
+        if(event == "createSubmit"){
+            fileContent = ts + " " + user + " " + scheme + " " + "create submit" + " ";
+        }
+        if(event == "pwSave"){
+            fileContent = ts + " " + user + " " + scheme + " " + "password save" + " ";
+        }
+        if(event == "loginSuccess"){
+            fileContent = ts + " " + user + " " + scheme + " " + "login success" + " ";
+        }
+        if(event == "loginFailure"){
+            fileContent = ts + " " + user + " " + scheme + " " + "login failure" + " ";
+        }
+
+        try(FileWriter fileWriter = new FileWriter(absolutePath, true)) {
+            fileWriter.write(fileContent);
+            fileWriter.write("\r\n");
+        } catch (IOException err) {
+            // exception handling
+            System.out.print("Error in writing file: " + err);
+        }
+
+    }
+
     private String makePassword(){
         String password = "";
         Random random = new Random();
@@ -92,6 +162,7 @@ public class Scheme extends JFrame {
             public void run()
             {
                 //write to file current user, timestamp, create event
+                fileWriter("createStart");
                 JFrame testFrame = new JFrame("Test Password");
                 testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -111,7 +182,9 @@ public class Scheme extends JFrame {
                 acceptPasswordButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        //write timestamp, user, password submit
                         testFrame.dispose();
+                        fileWriter("createSubmit");
                     }
                 });
 
@@ -124,11 +197,14 @@ public class Scheme extends JFrame {
 
                         if (Arrays.equals(input.getPassword(), password.toCharArray())) {
                             // password match! log practice success
+                            fileWriter("practiceGood");
                             JOptionPane.showMessageDialog(testFrame, "Correct Password");
                             System.out.println("password match!");
                         }
                         else {
                             JOptionPane.showMessageDialog(testFrame, "Wrong Password try again");
+                            //log password practice bad
+                            fileWriter("practiceBad");
                             System.out.println("wrong try again");
                         }
                         input.setText("");
@@ -162,7 +238,7 @@ public class Scheme extends JFrame {
             public void run()
             {
 
-                attempts = 2;
+                attempts = 3;
 
                 JFrame frame = new JFrame("Test Password");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -171,7 +247,7 @@ public class Scheme extends JFrame {
                 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
                 panel.setOpaque(true);
 
-                JLabel infoLabel = new JLabel("Enter your passowrd: ");
+                JLabel infoLabel = new JLabel("Enter your password: ");
 
                 JPanel inputpanel = new JPanel();
                 inputpanel.setLayout(new FlowLayout());
@@ -187,14 +263,37 @@ public class Scheme extends JFrame {
                                     // password match!
                                     JOptionPane.showMessageDialog(frame, "Success! " + attempts + " attempts left");
                                     System.out.println("password match!");
+                                    //write to file with timestamp, user, password submitted
+                                    fileWriter("loginSuccess");
                                     frame.dispose();
                                 } else {
-                                    JOptionPane.showMessageDialog(frame, "Wrong Password try again " + attempts + " attempts left");
-                                    System.out.println("wrong try again");
-                                    input.setText("");
+                                    attempts--;
+                                    if(attempts != 0) {
+                                        JOptionPane.showMessageDialog(frame, "Wrong Password try again " + attempts + " attempts left");
+                                        System.out.println("wrong try again");
+                                        //write to file with timestamp, user, practice bad
+                                        input.setText("");
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(frame,"Failed to enter password within 3 attempts");
+                                    }
                                 }
+
                             }
-                            attempts--;
+
+                            if(attempts == 0) {
+                                frame.dispose();
+                                if (isEmail) {
+                                    enterEmailButton.setEnabled(false);
+                                }
+                                if (isBank) {
+                                    enterBankButton.setEnabled(false);
+                                }
+                                if (isShop) {
+                                    enterShopButton.setEnabled(false);
+                                }
+                                fileWriter("loginFailure");
+                            }
                         }
 
                     });
@@ -224,6 +323,9 @@ public class Scheme extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //write to file create start event
                 emailPassword = makePassword();
+                isEmail = true;
+                isBank = false;
+                isShop = false;
                 openTestWindow(emailPassword);
 
                 System.out.println(emailPassword);
@@ -234,7 +336,10 @@ public class Scheme extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //final String
                 if (!emailPassword.isEmpty()) {
-                    
+                    isEmail = true;
+                    isBank = false;
+                    isShop = false;
+                    fileWriter("pwSave");
                     FINAL_EMAIL_PASSWORD = emailPassword;
                     System.out.println("Email password saved: " + FINAL_EMAIL_PASSWORD);
                     createEmailButton.setEnabled(false);
@@ -247,6 +352,9 @@ public class Scheme extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bankPassword = makePassword();
+                isEmail = false;
+                isBank = true;
+                isShop = false;
                 openTestWindow(bankPassword);
             }
         });
@@ -255,6 +363,10 @@ public class Scheme extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!bankPassword.isEmpty()) {
+                    isEmail = false;
+                    isBank = true;
+                    isShop = false;
+                    fileWriter("pwSave");
                     FINAL_BANK_PASSWORD = bankPassword;
                     System.out.println("Bank password saved: " + FINAL_EMAIL_PASSWORD);
                     createBankButton.setEnabled(false);
@@ -266,6 +378,9 @@ public class Scheme extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 shopPassword = makePassword();
+                isEmail = false;
+                isBank = false;
+                isShop = true;
                 openTestWindow(shopPassword);
             }
         });
@@ -274,6 +389,10 @@ public class Scheme extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!shopPassword.isEmpty()) {
+                    isEmail = false;
+                    isBank = false;
+                    isShop = true;
+                    fileWriter("pwSave");
                     FINAL_SHOP_PASSWORD = shopPassword;
                     System.out.println("Shop password saved: " + FINAL_EMAIL_PASSWORD);
                     createShopButton.setEnabled(false);
@@ -284,8 +403,12 @@ public class Scheme extends JFrame {
         enterEmailButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!FINAL_EMAIL_PASSWORD.equals(null))
+                if (!FINAL_EMAIL_PASSWORD.equals(null)) {
+                    isEmail = true;
+                    isBank = false;
+                    isShop = false;
                     openEnterWindow(FINAL_EMAIL_PASSWORD);
+                }
 
             }
         });
@@ -293,6 +416,9 @@ public class Scheme extends JFrame {
         doneEmailButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                isEmail = true;
+                isBank = false;
+                isShop = false;
                 enterEmailButton.setEnabled(false);
             }
         });
@@ -300,14 +426,20 @@ public class Scheme extends JFrame {
         enterBankButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!FINAL_BANK_PASSWORD.isEmpty())
+                if (!FINAL_BANK_PASSWORD.isEmpty()) {
+                    isEmail = false;
+                    isBank = true;
+                    isShop = false;
                     openEnterWindow(FINAL_BANK_PASSWORD);
-
+                }
             }
         });
         doneBankButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                isEmail = false;
+                isBank = true;
+                isShop = false;
                 enterBankButton.setEnabled(false);
             }
         });
@@ -316,13 +448,18 @@ public class Scheme extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!FINAL_SHOP_PASSWORD.isEmpty())
+                    isEmail = false;
+                    isBank = false;
+                    isShop = true;
                     openEnterWindow(FINAL_SHOP_PASSWORD);
-
             }
         });
         doneShopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                isEmail = false;
+                isBank = false;
+                isShop = true;
                 doneShopButton.setEnabled(false);
             }
         });
