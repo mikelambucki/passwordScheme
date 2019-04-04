@@ -103,25 +103,25 @@ public class Scheme extends JFrame {
             scheme+= "Shop";
         }
 
-        if(event == "practiceGood"){
+        if(event.equals("practiceGood")){
             fileContent = ts + " " + user + " " + scheme + " " + "practice good" + " ";
         }
-        if(event == "practiceBad"){
+        if(event.equals("practiceBad")){
             fileContent = ts + " " + user + " " + scheme + " " + "practice bad" + " ";
         }
-        if(event == "createStart"){
+        if(event.equals("createStart")){
             fileContent = ts + " " + user + " " + scheme + " " + "create start" + " ";
         }
-        if(event == "createSubmit"){
+        if(event.equals("createSubmit")){
             fileContent = ts + " " + user + " " + scheme + " " + "create submit" + " ";
         }
-        if(event == "pwSave"){
+        if(event.equals("pwSave")){
             fileContent = ts + " " + user + " " + scheme + " " + "password save" + " ";
         }
-        if(event == "loginSuccess"){
+        if(event.equals("loginSuccess")){
             fileContent = ts + " " + user + " " + scheme + " " + "login success" + " ";
         }
-        if(event == "loginFailure"){
+        if(event.equals("loginFailure")){
             fileContent = ts + " " + user + " " + scheme + " " + "login failure" + " ";
         }
 
