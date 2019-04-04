@@ -67,7 +67,8 @@ public class Scheme extends JFrame {
     private Date date = new Date();
     private Timestamp ts = new Timestamp(date.getTime());
 
-    String directory = "C:\\Users\\micha\\Documents\\COMP3008\\PasswordScheme";
+    String directory = "/Users/mattah/Desktop";
+    //String directory = "C:\\Users\\micha\\Documents\\COMP3008\\PasswordScheme";
     String fileName = "sample.txt";
     String absolutePath = directory + File.separator + fileName;
 
@@ -368,7 +369,7 @@ public class Scheme extends JFrame {
                     isShop = false;
                     fileWriter("pwSave");
                     FINAL_BANK_PASSWORD = bankPassword;
-                    System.out.println("Bank password saved: " + FINAL_EMAIL_PASSWORD);
+                    System.out.println("Bank password saved: " + FINAL_BANK_PASSWORD);
                     createBankButton.setEnabled(false);
                 }
             }
@@ -394,7 +395,7 @@ public class Scheme extends JFrame {
                     isShop = true;
                     fileWriter("pwSave");
                     FINAL_SHOP_PASSWORD = shopPassword;
-                    System.out.println("Shop password saved: " + FINAL_EMAIL_PASSWORD);
+                    System.out.println("Shop password saved: " + FINAL_SHOP_PASSWORD);
                     createShopButton.setEnabled(false);
                 }
             }
@@ -460,7 +461,7 @@ public class Scheme extends JFrame {
                 isEmail = false;
                 isBank = false;
                 isShop = true;
-                doneShopButton.setEnabled(false);
+                enterShopButton.setEnabled(false);
             }
         });
     }
