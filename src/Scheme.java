@@ -67,7 +67,8 @@ public class Scheme extends JFrame {
     private Date date = new Date();
     private Timestamp ts = new Timestamp(date.getTime());
 
-    String directory = "/Users/mattah/Desktop";
+    String directory = System.getProperty("user.dir");
+
     //String directory = "C:\\Users\\micha\\Documents\\COMP3008\\PasswordScheme";
     String fileName = "sample.txt";
     String absolutePath = directory + File.separator + fileName;
