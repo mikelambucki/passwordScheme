@@ -62,7 +62,8 @@ public class Scheme extends JFrame {
                                         "1", "2", "3", "4", "5", "6",
                                         "7", "8", "9", "0", ";", ":",
                                         "]", "[", "?", "=", "+", "_",
-                                        "-", "~", "/", "{", "}", "*",};
+                                        "-", "~", "/", "{", "}", "*",
+                                        "(", "<",">", "|", ")", "^"};
 
     private Date date = new Date();
     private Timestamp ts = new Timestamp(date.getTime());
