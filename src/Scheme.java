@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Date;
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class Scheme extends JFrame {
 
@@ -65,10 +67,12 @@ public class Scheme extends JFrame {
                                         "-", "~", "/", "{", "}", "*",
                                         "(", "<",">", "|", ")", "^"};
 
-    private Date date = new Date();
-    private Timestamp ts = new Timestamp(date.getTime());
 
-    String directory = "/Users/mattah/Desktop";
+
+
+
+    String directory = System.getProperty("user.dir");
+
     //String directory = "C:\\Users\\micha\\Documents\\COMP3008\\PasswordScheme";
     String fileName = "sample.txt";
     String absolutePath = directory + File.separator + fileName;
@@ -92,6 +96,8 @@ public class Scheme extends JFrame {
 //    create random 3 word 1 symbol password form WORDS & NUMBER_AND_SYMBOLS array
 
     private void fileWriter(String event){
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        
         String scheme = "";
         String fileContent = "";
         if(isEmail){
@@ -105,16 +111,16 @@ public class Scheme extends JFrame {
         }
 
         if(event.equals("practiceGood")){
-            fileContent = ts + " " + user + " " + scheme + " " + "practice good" + " ";
+            fileContent =ts + " " + user + " " + scheme + " " + "practice good" + " ";
         }
         if(event.equals("practiceBad")){
-            fileContent = ts + " " + user + " " + scheme + " " + "practice bad" + " ";
+            fileContent =ts + " " + user + " " + scheme + " " + "practice bad" + " ";
         }
         if(event.equals("createStart")){
             fileContent = ts + " " + user + " " + scheme + " " + "create start" + " ";
         }
         if(event.equals("createSubmit")){
-            fileContent = ts + " " + user + " " + scheme + " " + "create submit" + " ";
+            fileContent =ts + " " + user + " " + scheme + " " + "create submit" + " ";
         }
         if(event.equals("pwSave")){
             fileContent = ts + " " + user + " " + scheme + " " + "password save" + " ";
