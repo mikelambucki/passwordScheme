@@ -247,6 +247,7 @@ public class Scheme extends JFrame {
 
                 attempts = 3;
 
+                //program Jframe window
                 JFrame frame = new JFrame("Test Password");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -261,7 +262,7 @@ public class Scheme extends JFrame {
                 JPasswordField input = new JPasswordField(20);
                 JButton enterButton = new JButton("Enter");
 
-
+                // enter button action listener
                     enterButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
