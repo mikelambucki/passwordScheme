@@ -53,6 +53,7 @@ public class Scheme extends JFrame {
     int num = rand.nextInt(100000);
     private String user = "user" + Integer.toString(num);
 
+    //array of words for password
     private static final String [] WORDS = {"tie", "nose", "my", "ever", "how", "plan",
             "in", "cage", "did", "bell", "each", "fort",
             "bark", "cell", "late", "with", "pull", "draw",
@@ -60,6 +61,7 @@ public class Scheme extends JFrame {
             "hat", "walk", "mood", "hay", "pool", "hope",
             "dig", "ring", "map", "tape", "such", "main"};
 
+    //array of symbols for password
     private static final String [] NUMBER_AND_SYMBOLS = {"!", "@", "#", "$", "%", "&",
                                         "1", "2", "3", "4", "5", "6",
                                         "7", "8", "9", "0", ";", ":",
@@ -72,8 +74,6 @@ public class Scheme extends JFrame {
 
 
     String directory = System.getProperty("user.dir");
-
-    //String directory = "C:\\Users\\micha\\Documents\\COMP3008\\PasswordScheme";
     String fileName = "sample.txt";
     String absolutePath = directory + File.separator + fileName;
 
@@ -92,8 +92,6 @@ public class Scheme extends JFrame {
         return password;
     }
     */
-
-//    create random 3 word 1 symbol password form WORDS & NUMBER_AND_SYMBOLS array
 
     private void fileWriter(String event){
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -142,6 +140,7 @@ public class Scheme extends JFrame {
 
     }
 
+    //    create random 3 word 1 symbol password form WORDS & NUMBER_AND_SYMBOLS array
     private String makePassword(){
         String password = "";
         Random random = new Random();
@@ -324,8 +323,10 @@ public class Scheme extends JFrame {
 
     public Scheme() {
 
+        //initialize the program
         init();
 
+        //button action listeners
         createEmailButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
