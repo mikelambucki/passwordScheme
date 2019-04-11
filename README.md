@@ -5,7 +5,7 @@ passwordScheme/out/artifacts/passwordScheme_jar/
 
 program requirements
 Intellij 
-- java 1.8,
+- java 1.8, https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 Runtime instructions
 1. Open program with intellij or run program executable
